@@ -120,10 +120,10 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 
 | 字段          | 类型   | 必要           | 描述                                                                                                                |
 | ------------- | ------ | -------------- | ------------------------------------------------------------------------------------------------------------------- |
-| UserId        | string | 是             | 用户 ID，业务自定义生成                                                                                             |
+| UserId        | string | 是             | 用户 ID，业务自定义生成，不同用户需要生成不同 UserId 来区分                                                         |
 | ProjectId     | string | 是             | 项目 ID，应用云渲染项目创建时生成，[项目管理](https://console.cloud.tencent.com/car/project) 中获取，格式为 cap-xxx |
 | ClientSession | string | 是             | 客户端会话描述                                                                                                      |
-| RequestId     | string | 是             | 请求 ID，业务自定义生成                                                                                             |
+| RequestId     | string | 否             | 请求 ID，业务自定义生成，可用于业务区分不同请求                                                                     |
 | Sign          | string | 开启校验则必要 | 请求校验参数<br>计算方式：SHA256(字段名排序后取字段值，并拼接成字符串，最后再拼接上签名混淆密钥 SALT)               |
 
 - 响应
@@ -132,15 +132,15 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 | --------------- | ------ | --------------- |
 | Code            | number | 返回码          |
 | Msg             | string | 描述信息        |
-| RequestId       | string | 请求 ID         |
+| RequestId       | string | 业务请求 ID     |
 | SessionDescribe | object | webrtc 会话信息 |
 
 - SessionDescribe 结构
 
-| 字段          | 类型   | 描述                  |
-| ------------- | ------ | --------------------- |
-| ServerSession | string | 服务端会话            |
-| RequestId     | string | 应用云渲染服务请求 ID |
+| 字段          | 类型   | 描述                         |
+| ------------- | ------ | ---------------------------- |
+| ServerSession | string | 服务端会话                   |
+| RequestId     | string | 应用云渲染服务云 API 请求 ID |
 
 ### 2. 结束应用
 
@@ -152,17 +152,17 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 
 | 字段      | 类型   | 必要           | 描述                                                                                                  |
 | --------- | ------ | -------------- | ----------------------------------------------------------------------------------------------------- |
-| UserId    | string | 是             | 用户 ID，业务自定义生成                                                                               |
-| RequestId | string | 是             | 请求 ID，业务自定义生成                                                                               |
+| UserId    | string | 是             | 用户 ID，业务自定义生成，不同用户需要生成不同 UserId 来区分                                           |
+| RequestId | string | 否             | 请求 ID，业务自定义生成，可用于业务区分不同请求                                                       |
 | Sign      | string | 开启校验则必要 | 请求校验参数<br>计算方式：SHA256(字段名排序后取字段值，并拼接成字符串，最后再拼接上签名混淆密钥 SALT) |
 
 - 响应
 
-| 字段      | 类型   | 描述     |
-| --------- | ------ | -------- |
-| Code      | number | 返回码   |
-| Msg       | string | 描述信息 |
-| RequestId | string | 请求 ID  |
+| 字段      | 类型   | 描述        |
+| --------- | ------ | ----------- |
+| Code      | number | 返回码      |
+| Msg       | string | 描述信息    |
+| RequestId | string | 业务请求 ID |
 
 ### 3. 用户加入队列
 
@@ -174,19 +174,19 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 
 | 字段      | 类型   | 必要           | 描述                                                                                                                |
 | --------- | ------ | -------------- | ------------------------------------------------------------------------------------------------------------------- |
-| UserId    | string | 是             | 用户 ID，业务自定义生成                                                                                             |
+| UserId    | string | 是             | 用户 ID，业务自定义生成，不同用户需要生成不同 UserId 来区分                                                         |
 | ProjectId | string | 是             | 项目 ID，应用云渲染项目创建时生成，[项目管理](https://console.cloud.tencent.com/car/project) 中获取，格式为 cap-xxx |
-| RequestId | string | 是             | 请求 ID，业务自定义生成                                                                                             |
+| RequestId | string | 否             | 请求 ID，业务自定义生成，可用于业务区分不同请求                                                                     |
 | Sign      | string | 开启校验则必要 | 请求校验参数<br>计算方式：SHA256(字段名排序后取字段值，并拼接成字符串，最后再拼接上签名混淆密钥 SALT)               |
 
 - 响应
 
-| 字段      | 类型   | 描述     |
-| --------- | ------ | -------- |
-| Code      | number | 返回码   |
-| Msg       | string | 描述信息 |
-| RequestId | string | 请求 ID  |
-| Data      | object | 队列消息 |
+| 字段      | 类型   | 描述        |
+| --------- | ------ | ----------- |
+| Code      | number | 返回码      |
+| Msg       | string | 描述信息    |
+| RequestId | string | 业务请求 ID |
+| Data      | object | 队列消息    |
 
 - Data 结构
   
@@ -206,17 +206,17 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 
 | 字段      | 类型   | 必要           | 描述                                                                                                  |
 | --------- | ------ | -------------- | ----------------------------------------------------------------------------------------------------- |
-| UserId    | string | 是             | 用户 ID，业务自定义生成                                                                               |
-| RequestId | string | 是             | 请求 ID，业务自定义生成                                                                               |
+| UserId    | string | 是             | 用户 ID，业务自定义生成，不同用户需要生成不同 UserId 来区分                                           |
+| RequestId | string | 否             | 请求 ID，业务自定义生成，可用于业务区分不同请求                                                       |
 | Sign      | string | 开启校验则必要 | 请求校验参数<br>计算方式：SHA256(字段名排序后取字段值，并拼接成字符串，最后再拼接上签名混淆密钥 SALT) |
 
 - 响应
 
-| 字段      | 类型   | 描述     |
-| --------- | ------ | -------- |
-| Code      | number | 返回码   |
-| Msg       | string | 描述信息 |
-| RequestId | string | 请求 ID  |
+| 字段      | 类型   | 描述        |
+| --------- | ------ | ----------- |
+| Code      | number | 返回码      |
+| Msg       | string | 描述信息    |
+| RequestId | string | 业务请求 ID |
 
 ## 错误码定义
 

@@ -32,23 +32,19 @@ if (Config.configs[DefaultKeys.API_SIGN] == 'Y') {
       UserId: validSchema(validString, true),
       ProjectId: validSchema(validString, true),
       ClientSession: validSchema(validString, true),
-      RequestId: validSchema(validString, true),
       Sign: validSchema(validString, true),
     },
     '/StopProject': {
       UserId: validSchema(validString, true),
-      RequestId: validSchema(validString, true),
       Sign: validSchema(validString, true),
     },
     '/Enqueue': {
       UserId: validSchema(validString, true),
       ProjectId: validSchema(validString, true),
-      RequestId: validSchema(validString, true),
       Sign: validSchema(validString, true),
     },
     '/Dequeue': {
       UserId: validSchema(validString, true),
-      RequestId: validSchema(validString, true),
       Sign: validSchema(validString, true),
     },
     onFailed: onMissParams
@@ -59,20 +55,16 @@ if (Config.configs[DefaultKeys.API_SIGN] == 'Y') {
       UserId: validSchema(validString, true),
       ProjectId: validSchema(validString, true),
       ClientSession: validSchema(validString, true),
-      RequestId: validSchema(validString, true),
     },
     '/StopProject': {
       UserId: validSchema(validString, true),
-      RequestId: validSchema(validString, true),
     },
     '/Enqueue': {
       UserId: validSchema(validString, true),
       ProjectId: validSchema(validString, true),
-      RequestId: validSchema(validString, true),
     },
     '/Dequeue': {
       UserId: validSchema(validString, true),
-      RequestId: validSchema(validString, true),
     },
     onFailed: onMissParams
   };
