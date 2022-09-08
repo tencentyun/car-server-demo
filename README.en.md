@@ -82,13 +82,13 @@ chmod 777 build.sh && ./build.sh
 If you do not want to set environment variables, run this command:
 
 ```bash
-docker run -d -p3000:3000 demo
+docker run -d -p3000:3000 cgserver
 ```
 
 If you want to pass environment variables, run this command (you don’t need to set environment variables if the `config.json` file has been generated):
 
 ```bash
-docker run -d -p3000:3000 -e SECRET_KEY=xxx -e SECRET_ID=yyy -e SALT=zzz demo
+docker run -d -p3000:3000 -e SECRET_KEY=xxx -e SECRET_ID=yyy -e SALT=zzz cgserver
 ```
 
 Supported environment variables:
