@@ -63,6 +63,7 @@ Config.registerModule(__filename, {
         sign: {
           type: 'string',
           description: '是否开启请求校验参数（Y/N），不填默认不开启',
+          pattern: /^[YN]?$/,
           required: true,
           default: 'N'
         },
@@ -83,7 +84,7 @@ const AppErrorMsg = {
   QueueDone: { Code: 10101, Msg: 'queue done' },                  // 排队完成
   CreateFailed: { Code: 10200, Msg: 'create session failed' },    // 创建云应用会话失败
   StopFailed: { Code: 10201, Msg: 'stop project failed' },        // 释放云应用会话失败
-  LockFailed: { Code: 10202, Msg: 'try lock failed' },            // 锁定实例失败
+  LockFailed: { Code: 10202, Msg: 'apply concurrent failed' },    // 申请并发失败
 };
 
 const QueueState = {

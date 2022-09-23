@@ -124,28 +124,28 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 
 - Request parameters
 
-| Parameter          | Type   | Required           | Description                                                                                                                |
-| ------------- | ------ | -------------- | ------------------------------------------------------------------------------------------------------------------- |
-| UserId        | string | Yes             | The user ID, which is assigned by you.                                                                                             |
-| ProjectId     | string | Yes             | The CAR project ID, which is assigned when a project is created. You can view it (format: cap-xxx) in [Project management](https://console.cloud.tencent.com/car/project). |
-| ClientSession | string | Yes             | The client session information.                                                                                                      |
-| RequestId     | string | No             | The request ID, which is assigned by you.                                                                                             |
-| Sign          | string | Yes if validation is enabled | The validation parameter. <br>Calculation: The parameters are sorted by name and their values are spliced into a string, to which `SALT` is appended. The string is then converted into SHA256.                |
+| Parameter     | Type   | Required                     | Description                                                                                                                                                                                     |
+| ------------- | ------ | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UserId        | string | Yes                          | The user ID, which is assigned by you.                                                                                                                                                          |
+| ProjectId     | string | Yes                          | The CAR project ID, which is assigned when a project is created. You can view it (format: cap-xxx) in [Project management](https://console.cloud.tencent.com/car/project).                      |
+| ClientSession | string | Yes                          | The client session information.                                                                                                                                                                 |
+| RequestId     | string | No                           | The request ID, which is assigned by you.                                                                                                                                                       |
+| Sign          | string | Yes if validation is enabled | The validation parameter. <br>Calculation: The parameters are sorted by name and their values are spliced into a string, to which `SALT` is appended. The string is then converted into SHA256. |
 
 - Response parameters
 
-| Parameter | Type | Description |
-| --------------- | ------ | --------------- |
-| Code            | number | The return code.          |
-| Msg             | string | The message.        |
-| RequestId       | string | The request ID.         |
+| Parameter       | Type   | Description                     |
+| --------------- | ------ | ------------------------------- |
+| Code            | number | The return code.                |
+| Msg             | string | The message.                    |
+| RequestId       | string | The request ID.                 |
 | SessionDescribe | object | The WebRTC session information. |
 
 - `SessionDescribe` structure
 
-| Parameter | Type | Description |
-| ------------- | ------ | --------------------- |
-| ServerSession | string | The server session.            |
+| Parameter     | Type   | Description         |
+| ------------- | ------ | ------------------- |
+| ServerSession | string | The server session. |
 | RequestId     | string | The CAR request ID. |
 
 ### 2. End an application
@@ -156,19 +156,19 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 
 - Request parameters
 
-| Parameter          | Type   | Required           | Description                                                                                                                |
-| --------- | ------ | -------------- | ----------------------------------------------------------------------------------------------------- |
-| UserId        | string | Yes             | The user ID, which is assigned by you.                                                                                             |
-| RequestId     | string | No             | The request ID, which is assigned by you.                                                                                             |
-| Sign          | string | Yes if validation is enabled | The validation parameter. <br>Calculation: The parameters are sorted by name and their values are spliced into a string, to which `SALT` is appended. The string is then converted into SHA256.                |
+| Parameter | Type   | Required                     | Description                                                                                                                                                                                     |
+| --------- | ------ | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UserId    | string | Yes                          | The user ID, which is assigned by you.                                                                                                                                                          |
+| RequestId | string | No                           | The request ID, which is assigned by you.                                                                                                                                                       |
+| Sign      | string | Yes if validation is enabled | The validation parameter. <br>Calculation: The parameters are sorted by name and their values are spliced into a string, to which `SALT` is appended. The string is then converted into SHA256. |
 
 - Response parameters
 
-| Parameter | Type | Description |
-| --------- | ------ | -------- |
-| Code            | number | The return code.          |
-| Msg             | string | The message.        |
-| RequestId       | string | The request ID.         |
+| Parameter | Type   | Description      |
+| --------- | ------ | ---------------- |
+| Code      | number | The return code. |
+| Msg       | string | The message.     |
+| RequestId | string | The request ID.  |
 
 ### 3. Queue up
 
@@ -178,29 +178,29 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 
 - Request parameters
 
-| Parameter          | Type   | Required           | Description                                                                                                                |
-| --------- | ------ | -------------- | ------------------------------------------------------------------------------------------------------------------- |
-| UserId        | string | Yes             | The user ID, which is assigned by you.                                                                                             |
-| ProjectId     | string | Yes             | The CAR project ID, which is assigned when a project is created. You can view it (format: cap-xxx) in [Project management](https://console.cloud.tencent.com/car/project). |
-| RequestId     | string | No             | The request ID, which is assigned by you.                                                                                             |
-| Sign          | string | Yes if validation is enabled | The validation parameter. <br>Calculation: The parameters are sorted by name and their values are spliced into a string, to which `SALT` is appended. The string is then converted into SHA256.                |
+| Parameter | Type   | Required                     | Description                                                                                                                                                                                     |
+| --------- | ------ | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UserId    | string | Yes                          | The user ID, which is assigned by you.                                                                                                                                                          |
+| ProjectId | string | Yes                          | The CAR project ID, which is assigned when a project is created. You can view it (format: cap-xxx) in [Project management](https://console.cloud.tencent.com/car/project).                      |
+| RequestId | string | No                           | The request ID, which is assigned by you.                                                                                                                                                       |
+| Sign      | string | Yes if validation is enabled | The validation parameter. <br>Calculation: The parameters are sorted by name and their values are spliced into a string, to which `SALT` is appended. The string is then converted into SHA256. |
 
 - Response parameters
 
-| Parameter | Type | Description |
-| --------- | ------ | -------- |
-| Code            | number | The return code.          |
-| Msg             | string | The message.        |
-| RequestId       | string | The request ID.         |
+| Parameter | Type   | Description            |
+| --------- | ------ | ---------------------- |
+| Code      | number | The return code.       |
+| Msg       | string | The message.           |
+| RequestId | string | The request ID.        |
 | Data      | object | The queue information. |
 
 - `Data` structure
   
-| Parameter | Type | Description |
-| --------- | ------ | -------- |
+| Parameter | Type   | Description       |
+| --------- | ------ | ----------------- |
 | Index     | number | The queue number. |
-| userID | String | The user ID. |
-| ProjectId | string | The project ID.  |
+| userID    | String | The user ID.      |
+| ProjectId | string | The project ID.   |
 
 ### 4. Leave the queue
 
@@ -210,29 +210,29 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 
 - Request parameters
 
-| Parameter          | Type   | Required           | Description                                                                                                                |
-| --------- | ------ | -------------- | ----------------------------------------------------------------------------------------------------- |
-| UserId        | string | Yes             | The user ID, which is assigned by you.                                                                                             |
-| RequestId     | string | No             | The request ID, which is assigned by you.                                                                                             |
-| Sign          | string | Yes if validation is enabled | The validation parameter. <br>Calculation: The parameters are sorted by name and their values are spliced into a string, to which `SALT` is appended. The string is then converted into SHA256.                |
+| Parameter | Type   | Required                     | Description                                                                                                                                                                                     |
+| --------- | ------ | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UserId    | string | Yes                          | The user ID, which is assigned by you.                                                                                                                                                          |
+| RequestId | string | No                           | The request ID, which is assigned by you.                                                                                                                                                       |
+| Sign      | string | Yes if validation is enabled | The validation parameter. <br>Calculation: The parameters are sorted by name and their values are spliced into a string, to which `SALT` is appended. The string is then converted into SHA256. |
 
 - Response parameters
 
-| Parameter | Type | Description |
-| --------- | ------ | -------- |
-| Code            | number | The return code.          |
-| Msg             | string | The message.        |
-| RequestId       | string | The request ID.         |
+| Parameter | Type   | Description      |
+| --------- | ------ | ---------------- |
+| Code      | number | The return code. |
+| Msg       | string | The message.     |
+| RequestId | string | The request ID.  |
 
 ## Error Codes
 
-| Code  | Description                                     |
-| ----- | ---------------------------------------- |
-| 0     | Request successful.                                 |
-| 10000 | `sign` authentication error.                            |
-| 10001 | Parameter missing.                             |
+| Code  | Description                                                          |
+| ----- | -------------------------------------------------------------------- |
+| 0     | Request successful.                                                  |
+| 10000 | `sign` authentication error.                                         |
+| 10001 | Parameter missing.                                                   |
 | 10100 | The user is queuing up. Please continue requesting the queue number. |
-| 10101 | The user’s turn has come.                                 |
-| 10200 | Failed to create the CAR session.                   |
-| 10201 | Failed to release the CAR session.                   |
-| 10202 | Failed to lock the instance.                             |
+| 10101 | The user’s turn has come.                                            |
+| 10200 | Failed to create the CAR session.                                    |
+| 10201 | Failed to release the CAR session.                                   |
+| 10202 | Failed to apply the concurrent.                                      |

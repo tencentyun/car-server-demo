@@ -47,6 +47,14 @@
 
 - SALT：接口的签名 Key，注意保密。开启后请求参数需要增加 sign 参数，sign 根据 SALT 生成（sign 参数具体生成规则见下文）
 
+- REDIS_QUEUE：是否开启 redis 队列存储方式，默认为不开启，使用内存队列存储，建议业务上线后开启 redis 队列存储实现多机部署
+
+    如开启则需要填写 redis 服务地址和密码，不开启则无需填写
+
+- REDIS：redis 服务连接地址
+
+- REDIS_PWD：redis 服务密码，如果没有密码可为空
+
 ### 3. 启动服务
 
 配置项输入完成后会自动启动服务，控制台如输出 car-server-demo@0.0.0 start 则表示启动成功
@@ -88,7 +96,7 @@ docker run -d -p3000:3000 cgserver
 使用环境变量输入参数（如已生成 config.json, 不需要再设置环境变量）：
 
 ```bash
-docker run -d -p3000:3000 -e SECRET_KEY=xxx -e SECRET_ID=yyy -e SALT=zzz cgserver
+docker run -d -p3000:3000 -e SECRET_KEY=xxx -e SECRET_ID=yyy cgserver
 ```
 
 支持的环境变量如下：
@@ -102,6 +110,14 @@ docker run -d -p3000:3000 -e SECRET_KEY=xxx -e SECRET_ID=yyy -e SALT=zzz cgserve
     如开启则需要填写签名混淆密钥 SALT，不开启则无需填写
 
 - SALT：接口的签名 Key，注意保密。开启后请求参数需要增加 sign 参数，sign 根据 SALT 生成（sign 参数具体生成规则见下文）
+
+- REDIS_QUEUE：是否开启 redis 队列存储方式，默认为不开启，使用内存队列存储，建议业务上线后开启 redis 队列存储实现多机部署
+
+    如开启则需要填写 redis 服务地址和密码，不开启则无需填写
+
+- REDIS：redis 服务连接地址
+
+- REDIS_PWD：redis 服务密码，如果没有密码可为空
 
 ## 接口请求类型
 
@@ -235,4 +251,4 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 | 10101 | 排队完成                                 |
 | 10200 | 创建应用云渲染会话失败                   |
 | 10201 | 释放应用云渲染会话失败                   |
-| 10202 | 锁定实例失败                             |
+| 10202 | 申请并发失败                             |
