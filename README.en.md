@@ -37,9 +37,9 @@ Download the source code. Go to the directory of the source code and run the scr
 
 During the installation process, enter parameter values as required:
 
-- SECRET_ID: The `SecretId` of your Tencent Cloud account, which you can view in [API Keys](https://console.cloud.tencent.com/cam/capi).
+- SECRET_ID: The `SecretId` of your Tencent Cloud account, which you can view in [API Keys](https://console.intl.cloud.tencent.com/cam/capi).
 
-- SECRET_KEY: The `SecretKey` of your Tencent Cloud account, which you can view in [API Keys](https://console.cloud.tencent.com/cam/capi).
+- SECRET_KEY: The `SecretKey` of your Tencent Cloud account, which you can view in [API Keys](https://console.intl.cloud.tencent.com/cam/capi).
 
 - API_SIGN: Whether to enable request parameter validation. This is disabled by default. To ensure data security, we recommend you enable it after you launch your project.
 
@@ -93,9 +93,9 @@ docker run -d -p3000:3000 -e SECRET_KEY=xxx -e SECRET_ID=yyy -e SALT=zzz cgserve
 
 Supported environment variables:
 
-- SECRET_ID: The `SecretId` of your Tencent Cloud account, which you can view in [API Keys](https://console.cloud.tencent.com/cam/capi).
+- SECRET_ID: The `SecretId` of your Tencent Cloud account, which you can view in [API Keys](https://console.intl.cloud.tencent.com/cam/capi).
 
-- SECRET_KEY: The `SecretKey` of your Tencent Cloud account, which you can view in [API Keys](https://console.cloud.tencent.com/cam/capi).
+- SECRET_KEY: The `SecretKey` of your Tencent Cloud account, which you can view in [API Keys](https://console.intl.cloud.tencent.com/cam/capi).
 
 - API_SIGN: Whether to enable request parameter validation. This is disabled by default. To ensure data security, we recommend you enable it after you launch your project.
 
@@ -127,7 +127,7 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 | Parameter     | Type   | Required                     | Description                                                                                                                                                                                     |
 | ------------- | ------ | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | UserId        | string | Yes                          | The user ID, which is assigned by you.                                                                                                                                                          |
-| ProjectId     | string | Yes                          | The CAR project ID, which is assigned when a project is created. You can view it (format: cap-xxx) in [Project management](https://console.cloud.tencent.com/car/project).                      |
+| ProjectId     | string | Yes                          | The CAR project ID, which is assigned when a project is created. You can view it (format: cap-xxx) in [Project management](https://console.intl.cloud.tencent.com/car/project).                 |
 | ClientSession | string | Yes                          | The client session information.                                                                                                                                                                 |
 | RequestId     | string | No                           | The request ID, which is assigned by you.                                                                                                                                                       |
 | Sign          | string | Yes if validation is enabled | The validation parameter. <br>Calculation: The parameters are sorted by name and their values are spliced into a string, to which `SALT` is appended. The string is then converted into SHA256. |
@@ -181,7 +181,7 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 | Parameter | Type   | Required                     | Description                                                                                                                                                                                     |
 | --------- | ------ | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | UserId    | string | Yes                          | The user ID, which is assigned by you.                                                                                                                                                          |
-| ProjectId | string | Yes                          | The CAR project ID, which is assigned when a project is created. You can view it (format: cap-xxx) in [Project management](https://console.cloud.tencent.com/car/project).                      |
+| ProjectId | string | Yes                          | The CAR project ID, which is assigned when a project is created. You can view it (format: cap-xxx) in [Project management](https://console.intl.cloud.tencent.com/car/project).                 |
 | RequestId | string | No                           | The request ID, which is assigned by you.                                                                                                                                                       |
 | Sign      | string | Yes if validation is enabled | The validation parameter. <br>Calculation: The parameters are sorted by name and their values are spliced into a string, to which `SALT` is appended. The string is then converted into SHA256. |
 
