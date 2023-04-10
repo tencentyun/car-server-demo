@@ -144,6 +144,7 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 | ------------- | ------ | -------------- | ------------------------------------------------------------------------------------------------------------------- |
 | UserId        | string | 是             | 用户 ID，业务自定义生成，不同用户需要生成不同 UserId 来区分                                                         |
 | ProjectId     | string | 是             | 项目 ID，应用云渲染项目创建时生成，[项目管理](https://console.cloud.tencent.com/car/project) 中获取，格式为 cap-xxx |
+| ApplicationId | string | 否             | 应用 ID，多应用共享项目请求时有效，应用云渲染应用创建时生成，[应用管理](https://console.cloud.tencent.com/car/application) 中获取，格式为 app-xxx |
 | ClientSession | string | 是             | 客户端会话描述                                                                                                      |
 | RequestId     | string | 否             | 请求 ID，业务自定义生成，可用于业务区分不同请求                                                                     |
 | Sign          | string | 开启校验则必要 | 请求校验参数<br>计算方式：SHA256(字段名排序后取字段值，并拼接成字符串，最后再拼接上签名混淆密钥 SALT)               |
@@ -194,12 +195,13 @@ curl -X POST --data "ClientSession=xxx&RequestId=req123&UserId=userid123&Project
 
 - 请求
 
-| 字段      | 类型   | 必要           | 描述                                                                                                                |
-| --------- | ------ | -------------- | ------------------------------------------------------------------------------------------------------------------- |
-| UserId    | string | 是             | 用户 ID，业务自定义生成，不同用户需要生成不同 UserId 来区分                                                         |
-| ProjectId | string | 是             | 项目 ID，应用云渲染项目创建时生成，[项目管理](https://console.cloud.tencent.com/car/project) 中获取，格式为 cap-xxx |
-| RequestId | string | 否             | 请求 ID，业务自定义生成，可用于业务区分不同请求                                                                     |
-| Sign      | string | 开启校验则必要 | 请求校验参数<br>计算方式：SHA256(字段名排序后取字段值，并拼接成字符串，最后再拼接上签名混淆密钥 SALT)               |
+| 字段          | 类型   | 必要           | 描述                                                                                                                |
+| ------------- | ------ | -------------- | ------------------------------------------------------------------------------------------------------------------- |
+| UserId        | string | 是             | 用户 ID，业务自定义生成，不同用户需要生成不同 UserId 来区分                                                         |
+| ProjectId     | string | 是             | 项目 ID，应用云渲染项目创建时生成，[项目管理](https://console.cloud.tencent.com/car/project) 中获取，格式为 cap-xxx |
+| ApplicationId | string | 否             | 应用 ID，多应用共享项目请求时有效，应用云渲染应用创建时生成，[应用管理](https://console.cloud.tencent.com/car/application) 中获取，格式为 app-xxx |
+| RequestId     | string | 否             | 请求 ID，业务自定义生成，可用于业务区分不同请求                                                                     |
+| Sign          | string | 开启校验则必要 | 请求校验参数<br>计算方式：SHA256(字段名排序后取字段值，并拼接成字符串，最后再拼接上签名混淆密钥 SALT)               |
 
 - 响应
 
