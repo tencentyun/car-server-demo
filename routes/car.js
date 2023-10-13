@@ -42,6 +42,7 @@ if (Config.configs[DefaultKeys.API_SIGN] == 'Y') {
       UserId: validSchema(validString, true),
       ProjectId: validSchema(validString, true),
       ApplicationId: validSchema(validString, false),
+      ApplicationVersionId: validSchema(validString, false),
       ClientSession: validSchema(validString, true),
       Sign: validSchema(validString, true),
     },
@@ -53,6 +54,7 @@ if (Config.configs[DefaultKeys.API_SIGN] == 'Y') {
       UserId: validSchema(validString, true),
       ProjectId: validSchema(validString, true),
       ApplicationId: validSchema(validString, false),
+      ApplicationVersionId: validSchema(validString, false),
       Sign: validSchema(validString, true),
     },
     '/Dequeue': {
@@ -67,6 +69,7 @@ if (Config.configs[DefaultKeys.API_SIGN] == 'Y') {
       UserId: validSchema(validString, true),
       ProjectId: validSchema(validString, true),
       ApplicationId: validSchema(validString, false),
+      ApplicationVersionId: validSchema(validString, false),
       ClientSession: validSchema(validString, true),
     },
     '/StopProject': {
@@ -76,6 +79,7 @@ if (Config.configs[DefaultKeys.API_SIGN] == 'Y') {
       UserId: validSchema(validString, true),
       ProjectId: validSchema(validString, true),
       ApplicationId: validSchema(validString, false),
+      ApplicationVersionId: validSchema(validString, false),
     },
     '/Dequeue': {
       UserId: validSchema(validString, true),
@@ -98,6 +102,7 @@ router.post('/StartProject', verifyReqParams, verifySign, async (req, res, next)
       UserIp: userIp,
       ProjectId: params.ProjectId,
       ApplicationId: params.ApplicationId,
+      ApplicationVersionId: params.ApplicationVersionId,
     });
     if (ret.Code != 0) {
       simpleRespone(req, res, ret);
@@ -149,6 +154,7 @@ const doCheckQueue = async key => {
         UserId: item.UserId,
         ProjectId: item.ProjectId,
         ApplicationId: item.ApplicationId,
+        ApplicationVersionId: item.ApplicationVersionId,
         UserIp: item.UserIp
       };
       waitQueue[key].State = QueueState.Locking;
@@ -174,6 +180,7 @@ router.post('/Enqueue', verifyReqParams, verifySign, async (req, res, next) => {
   const UserId = Params.UserId;
   const ProjectId = Params.ProjectId;
   const ApplicationId = Params.ApplicationId;
+  const ApplicationVersionId = Params.ApplicationVersionId;
   const UserIp = getClientIp(req);
 
   const response = (item, index) => {
@@ -197,6 +204,7 @@ router.post('/Enqueue', verifyReqParams, verifySign, async (req, res, next) => {
     waitQueue[UserId].TimeStamp = Date.now();
     waitQueue[UserId].ProjectId = ProjectId;
     waitQueue[UserId].ApplicationId = ApplicationId;
+    waitQueue[UserId].ApplicationVersionId = ApplicationVersionId;
     LOG.debug(`${UserId} update timestamp`);
     return response(waitQueue[UserId], await queue.indexOf(UserId));
   }
@@ -205,12 +213,13 @@ router.post('/Enqueue', verifyReqParams, verifySign, async (req, res, next) => {
     UserId,
     ProjectId,
     ApplicationId,
+    ApplicationVersionId,
     UserIp,
     TimeStamp: Date.now(),
     State: QueueState.Wait,
   };
   try {
-    await applyConcurrent({ UserId: UserId, ProjectId: ProjectId, ApplicationId: ApplicationId, UserIp: UserIp });
+    await applyConcurrent({ UserId: UserId, ProjectId: ProjectId, ApplicationId: ApplicationId, ApplicationVersionId: ApplicationVersionId, UserIp: UserIp });
     newUser.State = QueueState.Done;
     newUser.TimeStamp = Date.now();
     LOG.debug(`${UserId} ready to play`);
