@@ -19,6 +19,7 @@
     "redis": "^3.1.2",
     "tencentcloud": "^3.0.1",
     "tencentcloud-sdk-nodejs": "^4.0.271",
+    "tls-sig-api-v2": "^1.0.2",
     "uuid": "^8.3.2"
   }
 }

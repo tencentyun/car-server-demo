@@ -4,7 +4,9 @@ const router = express.Router();
 const {
   applyConcurrent,
   destroySession,
-  createSession } = require('../cloud_rendering_lib/car');
+  createSession,
+  startPublishStreamWithURL,
+  stopPublishStream } = require('../cloud_rendering_lib/car');
 const {
   AppErrorMsg,
   QueueState,
@@ -21,6 +23,8 @@ const BaseQueue = require('../cloud_rendering_lib/base_queue');
 const MemQueue = require('../cloud_rendering_lib/mem_queue');
 const RedisQueue = require('../cloud_rendering_lib/redis_queue');
 const LOG = require('../cloud_rendering_lib/log');
+const { GenUserSig } = require('../cloud_rendering_lib/trtc_user_sig');
+const { GetUrl, InitGame } = require('../cloud_rendering_lib/sud');
 
 let apiParamsSchema = {};
 const waitQueue = {};
@@ -46,6 +50,15 @@ if (Config.configs[DefaultKeys.API_SIGN] == 'Y') {
       ClientSession: validSchema(validString, true),
       Sign: validSchema(validString, true),
     },
+    '/StartPublishStream': {
+      UserId: validSchema(validString, true),
+      RoomId: validSchema(validString, true),
+      SdkAppId: validSchema(validString, true),
+    },
+    '/StopPublishStream': {
+      UserId: validSchema(validString, true),
+      Sign: validSchema(validString, true),
+    },
     '/StopProject': {
       UserId: validSchema(validString, true),
       Sign: validSchema(validString, true),
@@ -72,6 +85,14 @@ if (Config.configs[DefaultKeys.API_SIGN] == 'Y') {
       ApplicationVersionId: validSchema(validString, false),
       ClientSession: validSchema(validString, true),
     },
+    '/StartPublishStreamWithURL': {
+      UserId: validSchema(validString, true),
+      RoomId: validSchema(validString, true),
+      SdkAppId: validSchema(validString, false),
+    },
+    '/StopPublishStream': {
+      UserId: validSchema(validString, true),
+    },
     '/StopProject': {
       UserId: validSchema(validString, true),
     },
@@ -92,10 +113,28 @@ const verifyReqParams = RequestConstraint.prototype.verify.bind(new RequestConst
 
 router.post('/StartProject', verifyReqParams, verifySign, async (req, res, next) => {
   const params = req.body;
+  LOG.info(req.path, 'req content:', params);
 
   try {
     const userIp = getClientIp(req);
 
+    // 获取游戏的URL 详细接口说明参照 (https://docs.sud.tech/zh-CN/app/Server/API/ObtainServerEndAPIConfigurations.html)
+    const urlsRsp = await GetUrl();
+
+    // 初始化游戏 详细接口说明参照  (https://docs.sud.tech/zh-CN/app/Server/API/BulletAPI/BulletInit.html)
+    const urls = JSON.parse(urlsRsp)
+    const initGameRsp = await InitGame(urls.bullet_api.init, {
+      mg_id: 'xxx',
+      anchor_info: {
+        uid: params.UserId,
+        nick_name: `${params.UserId}_game`,
+        avatar_url: "xxx"
+      }
+    })
+
+    LOG.info(req.path,'initGame rsp:', initGameRsp)
+    const initGameRspJson = JSON.parse(initGameRsp)
+    const roomCode = initGameRspJson && initGameRspJson.data && initGameRspJson.data.room_code || 'xxxx';
     // 申请并发，详细接口说明参照（https://cloud.tencent.com/document/product/1547/72827）
     let ret = await applyConcurrent({
       UserId: params.UserId,
@@ -114,8 +153,61 @@ router.post('/StartProject', verifyReqParams, verifySign, async (req, res, next)
       UserId: params.UserId,
       UserIp: userIp,
       ClientSession: params.ClientSession,
+      ApplicationParameters: `-roomCode ${roomCode}`
     });
 
+    if (ret.Code != 0) {
+      simpleRespone(req, res, ret);
+      return;
+    }
+    ret.RoomCode = roomCode;
+    ret.UserSig = GenUserSig(params.UserId);
+    simpleRespone(req, res, ret);
+  } catch (e) {
+    LOG.error(req.path, 'raise except:', e);
+    simpleRespone(req, res, e);
+  }
+});
+
+router.post('/StartPublishStream', verifyReqParams, verifySign, async (req, res, next) => {
+  const params = req.body;
+  const userId = params.UserId;
+  const roomId = params.RoomId;
+  const sdkAppId = Config.configs[DefaultKeys.TRTC_SDKAPPID];
+  const userSig = params.UserSig;
+  const url = `rtmp://rtmp.rtc.qq.com/push/${roomId}?sdkappid=${sdkAppId}&userid=${userId}&usersig=${userSig}&use_number_room_id=1`;
+  LOG.info(req.path, 'req content:', params, url);
+  try {
+    // 开始云端推流到指定URL，详细接口说明参照（https://cloud.tencent.com/document/product/1547/98726）
+    let ret = await startPublishStreamWithURL({
+      UserId: userId,
+      PublishStreamURL: url
+    });
+    if (ret.Code != 0) {
+      simpleRespone(req, res, ret);
+      return;
+    }
+
+    simpleRespone(req, res, ret);
+  } catch (e) {
+    LOG.error(req.path, 'raise except:', e);
+    simpleRespone(req, res, e);
+  }
+});
+
+router.post('/StopPublishStream', verifyReqParams, verifySign, async (req, res, next) => {
+  const params = req.body;
+  const userId = params.UserId;
+  LOG.info(req.path, 'req content:', params);
+  try {
+    // 停止云端推流，详细接口说明参照（https://cloud.tencent.com/document/product/1547/89668）
+    let ret = await stopPublishStream({
+      UserId: userId,
+    });
+    if (ret.Code != 0) {
+      simpleRespone(req, res, ret);
+      return;
+    }
 
     simpleRespone(req, res, ret);
   } catch (e) {
@@ -127,10 +219,10 @@ router.post('/StartProject', verifyReqParams, verifySign, async (req, res, next)
 router.post('/StopProject', verifyReqParams, verifySign, async (req, res, next) => {
   const params = req.body;
   const userId = params.UserId;
-
+  LOG.info(req.path, 'req content:', params);
   try {
     // 销毁会话，详细接口说明参照（https://cloud.tencent.com/document/product/1547/72812）
-    ret = await destroySession({
+    let ret = await destroySession({
       UserId: userId
     });
 

@@ -8,6 +8,11 @@ const LOG = require('./log');
 const kSecretIdEnv = 'SECRET_ID';
 const kSecretKeyEnv = 'SECRET_KEY';
 const kApiSignEnv = 'API_SIGN';
+const kTRTCSdkAppIdEnv = 'TRTC_SDKAPPID';
+const kTRTCSecretKeyEnv = 'TRTC_SECRET_KEY';
+const kSudAppIdEnv = 'SUD_APPID';
+const kSudAppKeyEnv = 'SUD_APP_KEY';
+const kSudAppSecretEnv = 'SUD_APP_SECRET';
 
 const objectToString = Object.prototype.toString;
 const toTypeString = v => objectToString.call(v);
@@ -36,6 +41,21 @@ Config.registerModule(__filename, {
     if (validString(proc.env[kSecretKeyEnv])) {
       conf[DefaultKeys.SECRET_KEY] = proc.env[kSecretKeyEnv];
     }
+    if (validString(proc.env[kTRTCSdkAppIdEnv])) {
+      conf[DefaultKeys.TRTC_SDKAPPID] = proc.env[kTRTCSdkAppIdEnv];
+    }
+    if (validString(proc.env[kTRTCSecretKeyEnv])) {
+      conf[DefaultKeys.TRTC_SECRET_KEY] = proc.env[kTRTCSecretKeyEnv];
+    }
+    if (validString(proc.env[kSudAppIdEnv])) {
+      conf[DefaultKeys.SUD_APPID] = proc.env[kSudAppIdEnv];
+    }
+    if (validString(proc.env[kSudAppKeyEnv])) {
+      conf[DefaultKeys.SUD_APP_KEY] = proc.env[kSudAppKeyEnv];
+    }
+    if (validString(proc.env[kSudAppSecretEnv])) {
+      conf[DefaultKeys.SUD_APP_SECRET] = proc.env[kSudAppSecretEnv];
+    }
     if (validString(proc.env[kApiSignEnv])) {
       conf[DefaultKeys.API_SIGN] = proc.env[kApiSignEnv];
     } else {
@@ -60,6 +80,41 @@ Config.registerModule(__filename, {
           required: true,
           default: ''
         },
+        TRTCSdkAppId: {
+          type: 'string',
+          description: '请输入腾讯云音视频 SdkAppId',
+          pattern: /^[a-zA-Z\d\s-]+$/,
+          required: true,
+          default: ''
+        },
+        TRTCSecretKey: {
+          type: 'string',
+          description: '请输入腾讯云音视频 SecretKey',
+          pattern: /^[a-zA-Z\d\s-]+$/,
+          required: true,
+          default: ''
+        },
+        sudAppId: {
+          type: 'string',
+          description: '请输入 Sud AppID',
+          pattern: /^[a-zA-Z\d\s-]+$/,
+          required: true,
+          default: ''
+        },
+        sudAppKey: {
+          type: 'string',
+          description: '请输入 Sud App Key',
+          pattern: /^[a-zA-Z\d\s-]+$/,
+          required: true,
+          default: ''
+        },
+        sudAppSecret: {
+          type: 'string',
+          description: '请输入 Sud App Secret',
+          pattern: /^[a-zA-Z\d\s-]+$/,
+          required: true,
+          default: ''
+        },
         sign: {
           type: 'string',
           description: '是否开启请求校验参数（Y/N），不填默认不开启',
@@ -72,6 +127,11 @@ Config.registerModule(__filename, {
     const ret = await prompt.get(schema);
     Config.set(DefaultKeys.SECRET_ID, ret.secretId);
     Config.set(DefaultKeys.SECRET_KEY, ret.secretKey);
+    Config.set(DefaultKeys.TRTC_SDKAPPID, ret.TRTCSdkAppId);
+    Config.set(DefaultKeys.TRTC_SECRET_KEY, ret.TRTCSecretKey);
+    Config.set(DefaultKeys.SUD_APPID, ret.sudAppId);
+    Config.set(DefaultKeys.SUD_APP_KEY, ret.sudAppKey);
+    Config.set(DefaultKeys.SUD_APP_SECRET, ret.sudAppSecret);
     Config.set(DefaultKeys.API_SIGN, ret.sign);
   }
 });
@@ -85,6 +145,8 @@ const AppErrorMsg = {
   CreateFailed: { Code: 10200, Msg: 'create session failed' },    // 创建云应用会话失败
   StopFailed: { Code: 10201, Msg: 'stop project failed' },        // 释放云应用会话失败
   LockFailed: { Code: 10202, Msg: 'apply concurrent failed' },    // 申请并发失败
+  PublishFailed: { Code: 10203, Msg: 'start publish failed' },    // 发起推流失败
+  StopStreamFailed: { Code: 10204, Msg: 'stop stream failed' },   // 停止推流失败
 };
 
 const QueueState = {
@@ -108,6 +170,7 @@ const simpleRespone = (req, res, errorMsg) => {
   res ? res.json(response) : (_ => { })();
   errorMsg.Code != 0 ? LOG.error('RequestId', params.RequestId, errorMsg)
     : LOG.info('RequestId', params.RequestId, errorMsg);
+  LOG.info('res content', req.body, response, errorMsg);
   return response;
 };
 
@@ -119,6 +182,8 @@ const onMissParams = (req, res, next, missKeys) => {
 const validSchema = (checker, isRequire) => {
   return { valid: checker, require: isRequire };
 };
+
+const TRTCUserSigExpire = 60 * 60 * 72
 
 module.exports = {
   AppErrorMsg,
@@ -143,5 +208,6 @@ module.exports = {
   validNumber,
   simpleRespone,
   onMissParams,
-  validSchema
+  validSchema,
+  TRTCUserSigExpire
 };
